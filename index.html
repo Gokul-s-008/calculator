@@ -3,35 +3,117 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#101323">
-<title>Gokul Calculator</title>
+<meta name="theme-color" content="#f5f7fb">
+<title>Task Planner — Team Schedule</title>
 <style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 20% 10%,#29345d 0,#151a30 38%,#0b0e19 100%);font-family:Inter,system-ui,Arial,sans-serif;color:#f7f8ff}.wrap{width:min(100%,390px)}.brand{font-size:12px;letter-spacing:3px;color:#9da9d8;text-align:center;margin:0 0 16px}.calc{padding:22px;border:1px solid #ffffff20;border-radius:28px;background:#171c31dd;box-shadow:0 25px 80px #0008;backdrop-filter:blur(16px)}.screen{min-height:116px;padding:14px 8px 22px;display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;overflow:hidden}.previous{min-height:24px;color:#9da8ca;font-size:16px;word-break:break-all}.current{font-size:clamp(34px,10vw,48px);font-weight:600;letter-spacing:-2px;word-break:break-all}.keys{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}.key{border:0;border-radius:17px;min-height:66px;background:#252c46;color:#f5f6ff;font-size:22px;font-weight:600;cursor:pointer;transition:transform .12s,filter .12s;box-shadow:inset 0 1px #ffffff12}.key:hover{filter:brightness(1.18)}.key:active{transform:scale(.95)}.muted{background:#343c59;color:#cbd3f4}.operator{background:#303b68;color:#aebeff}.equals{background:linear-gradient(135deg,#7c67ff,#4b8dff);color:white}.zero{grid-column:span 2}.foot{text-align:center;color:#7782a8;font-size:11px;margin:16px 0 0;letter-spacing:1px}@media(max-width:380px){.calc{padding:16px}.key{min-height:59px}}
+:root{color-scheme:light dark;--bg:#f4f6fb;--panel:#fff;--ink:#172033;--muted:#69758b;--line:#e4e9f2;--work:#2878e8;--work-soft:#eaf2ff;--break:#15966b;--break-soft:#e7f7f0;--accent:#6658df;--shadow:0 12px 35px #25385812}
+@media(prefers-color-scheme:dark){:root{--bg:#101522;--panel:#192235;--ink:#edf2fc;--muted:#a1aec4;--line:#2b3850;--work:#72aaff;--work-soft:#203653;--break:#55d6a4;--break-soft:#173b32;--accent:#a49aff;--shadow:0 12px 35px #0003}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}button,input{font:inherit}button{cursor:pointer}.shell{max-width:980px;margin:auto;padding:34px 22px 70px}.top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:24px}.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:750}.top h1{font-size:clamp(30px,5vw,43px);line-height:1.1;margin:7px 0}.sub{color:var(--muted);margin:0}.live-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel);padding:9px 13px;border-radius:99px;color:var(--muted);font-size:13px;white-space:nowrap}.dot{width:8px;height:8px;border-radius:50%;background:#21b77a;box-shadow:0 0 0 4px #21b77a20}.panel{background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:22px;margin-bottom:18px}.overview{display:grid;grid-template-columns:1fr 1fr;gap:18px}.metric-label{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.08em;text-transform:uppercase}.metric-value{font-size:clamp(22px,4vw,30px);font-weight:750;letter-spacing:-.03em;margin-top:5px}.metric-note{font-size:13px;color:var(--muted);margin-top:3px}.progress-wrap{margin-top:18px}.progress-head{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--muted);margin-bottom:9px}.progress{height:10px;border-radius:99px;background:var(--line);overflow:hidden}.progress>span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--work),var(--accent));border-radius:99px;transition:width .3s}.toolbar{display:flex;flex-wrap:wrap;gap:12px;align-items:end}.field{display:grid;gap:6px;min-width:145px;flex:1}.field label{font-size:12px;font-weight:700;color:var(--muted)}input[type=time],input[type=text],input[type=number]{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:11px;padding:10px 12px;min-height:43px}input:focus-visible,button:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent);outline-offset:2px}.btn{border:1px solid var(--line);border-radius:11px;padding:10px 14px;background:var(--panel);color:var(--ink);font-weight:650;min-height:42px}.btn.primary{background:var(--accent);border-color:var(--accent);color:white}.btn:disabled{opacity:.4;cursor:not-allowed}.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:26px 0 14px}.section-head h2{font-size:20px;margin:0}.legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12px}.legend span{display:flex;align-items:center;gap:6px}.swatch{width:9px;height:9px;border-radius:3px;background:var(--work)}.swatch.green{background:var(--break)}.timeline{position:relative;display:grid;gap:12px}.timeline:before{content:"";position:absolute;left:18px;top:23px;bottom:23px;width:2px;background:var(--line)}.block{position:relative;display:grid;grid-template-columns:38px minmax(0,1fr);gap:13px;align-items:start}.rail{z-index:1;width:38px;height:38px;display:grid;place-items:center;border-radius:13px;background:var(--work-soft);color:var(--work);border:1px solid color-mix(in srgb,var(--work) 18%,transparent);font-size:17px}.block.break .rail{background:var(--break-soft);color:var(--break);border-color:color-mix(in srgb,var(--break) 20%,transparent)}.block-card{border:1px solid var(--line);background:var(--panel);border-radius:17px;padding:15px 16px;min-width:0}.block.active .block-card{border:2px solid var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 10%,transparent)}.block.active .rail{background:var(--accent);color:white}.block-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.block-title{font-weight:750;font-size:16px;margin:0 0 5px;overflow-wrap:anywhere}.block.break .block-title{color:var(--break)}.time{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}.duration{font-size:12px;color:var(--muted);white-space:nowrap;background:var(--bg);padding:5px 8px;border-radius:8px}.block-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}.check{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}.check input{width:17px;height:17px;accent-color:var(--accent)}.now-tag{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--accent)}.edit-tools{display:flex;gap:6px}.icon-btn{width:32px;height:32px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--muted);font-weight:700}.editor{margin-top:20px}.editor summary{cursor:pointer;font-weight:750;list-style:none;display:flex;justify-content:space-between;align-items:center}.editor summary::-webkit-details-marker{display:none}.editor summary:after{content:"＋";color:var(--accent);font-size:20px}.editor[open] summary:after{content:"−"}.editor-inner{padding-top:18px}.editor-list{display:grid;gap:9px;margin-bottom:18px}.edit-row{display:grid;grid-template-columns:minmax(0,1fr) 110px auto;gap:8px;align-items:center}.edit-row input[type=checkbox]{width:18px;height:18px;accent-color:var(--break)}.edit-row .name-input{min-width:0}.add-form{display:grid;grid-template-columns:minmax(0,1fr) 115px auto;gap:8px;padding-top:15px;border-top:1px solid var(--line)}.hint{font-size:12px;color:var(--muted);margin:10px 0 0}.empty{padding:30px;text-align:center;color:var(--muted)}.footer-note{text-align:center;color:var(--muted);font-size:12px;margin-top:25px}
+@media(max-width:620px){.shell{padding:24px 14px 50px}.top{display:block}.live-pill{margin-top:15px}.panel{padding:17px;border-radius:18px}.overview{gap:12px}.block-card{padding:13px}.edit-row{grid-template-columns:minmax(0,1fr) 82px auto}.add-form{grid-template-columns:minmax(0,1fr) 92px}.add-form button{grid-column:1/-1}.section-head{align-items:flex-start;flex-direction:column}.toolbar .btn{flex:1}}
+@media print{body{background:white;color:#111}.shell{max-width:none;padding:0}.panel,.block-card{box-shadow:none;background:white;border-color:#ddd}.live-pill,.toolbar,.editor,.edit-tools,.check input,.footer-note{display:none!important}.block{break-inside:avoid}.block-title,.time,.metric-value,.metric-label{color:#111}.timeline:before{background:#ddd}.block.active .block-card{border:1px solid #bbb}.progress{border:1px solid #bbb}.progress>span{background:#777!important}}
 </style>
 </head>
 <body>
-<main class="wrap">
-<p class="brand">GOKUL · CALCULATOR</p>
-<section class="calc" aria-label="Calculator">
-<div class="screen" aria-live="polite"><div class="previous" id="previous"></div><div class="current" id="display">0</div></div>
-<div class="keys">
-<button class="key muted" data-action="clear">AC</button><button class="key muted" data-action="delete">DEL</button><button class="key muted" data-action="percent">%</button><button class="key operator" data-op="÷">÷</button>
-<button class="key" data-num="7">7</button><button class="key" data-num="8">8</button><button class="key" data-num="9">9</button><button class="key operator" data-op="×">×</button>
-<button class="key" data-num="4">4</button><button class="key" data-num="5">5</button><button class="key" data-num="6">6</button><button class="key operator" data-op="−">−</button>
-<button class="key" data-num="1">1</button><button class="key" data-num="2">2</button><button class="key" data-num="3">3</button><button class="key operator" data-op="+">+</button>
-<button class="key zero" data-num="0">0</button><button class="key" data-action="decimal">.</button><button class="key equals" data-action="equals">=</button>
-</div>
-</section><p class="foot">SIMPLE · FAST · RESPONSIVE</p>
+<main class="shell">
+<header class="top"><div><div class="eyebrow">Team workspace · Daily plan</div><h1>Task Planner</h1><p class="sub">A focused day, with room to recharge.</p></div><div class="live-pill"><span class="dot"></span><span id="liveClock">Loading local time…</span></div></header>
+<section class="panel">
+ <div class="overview">
+  <div><div class="metric-label">Current activity</div><div class="metric-value" id="currentTitle">Not started</div><div class="metric-note" id="currentNote">Your schedule will appear here.</div></div>
+  <div><div class="metric-label" id="nextLabel">Next up</div><div class="metric-value" id="countdown">—</div><div class="metric-note" id="nextTitle">Waiting for schedule</div></div>
+ </div>
+ <div class="progress-wrap"><div class="progress-head"><span>Day progress</span><strong id="progressText">0%</strong></div><div class="progress" role="progressbar" aria-label="Day progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar"><span id="progressFill"></span></div></div>
+</section>
+<section class="panel toolbar">
+ <div class="field"><label for="startTime">START TIME (ASIA/KOLKATA)</label><input id="startTime" type="time" value="09:00"></div>
+ <button class="btn" id="soundBtn" type="button" aria-pressed="false">♪ Sound: Off</button>
+ <button class="btn" id="notifyBtn" type="button">Enable notifications</button>
+ <button class="btn" id="printBtn" type="button">Print schedule</button>
+</section>
+<div class="section-head"><h2>Today's timeline</h2><div class="legend"><span><i class="swatch"></i> Work</span><span><i class="swatch green"></i> Break</span></div></div>
+<section id="timeline" class="timeline" aria-label="Task timeline"></section>
+<details class="panel editor" id="editor">
+ <summary>Edit your schedule</summary>
+ <div class="editor-inner">
+  <div id="editorList" class="editor-list"></div>
+  <form id="addForm" class="add-form">
+   <input id="newName" type="text" placeholder="New task or BREAK" aria-label="New task or break name" required>
+   <input id="newDuration" type="number" min="1" max="1440" value="30" aria-label="Duration in minutes" required>
+   <button class="btn primary" type="submit">Add block</button>
+  </form>
+  <p class="hint">Use BREAK or LUNCH BREAK for green rest blocks. Use the arrows to reorder blocks; all times update automatically. Changes are saved in this browser.</p>
+ </div>
+</details>
+<p class="footer-note">Times use Asia/Kolkata (IST). Your task check-offs and schedule edits stay in this browser.</p>
 </main>
 <script>
-const display=document.getElementById('display'),previous=document.getElementById('previous');
-let current='0',stored=null,operator=null,replace=false;
-function render(){display.textContent=current;previous.textContent=stored!==null?stored+' '+(operator||''):''}
-function number(n){if(replace){current=n;replace=false}else if(current==='0')current=n;else if(current.length<14)current+=n;render()}
-function choose(op){if(operator&&stored!==null&&!replace)calculate();stored=current;operator=op;replace=true;render()}
-function calculate(){if(stored===null||!operator)return;const a=Number(stored),b=Number(current);let result=operator==='+'?a+b:operator==='−'?a-b:operator==='×'?a*b:b===0?NaN:a/b;current=Number.isFinite(result)?String(Number(result.toPrecision(12))):'Error';stored=null;operator=null;replace=true;render()}
-document.querySelector('.keys').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.num!==undefined)number(b.dataset.num);else if(b.dataset.op)choose(b.dataset.op);else switch(b.dataset.action){case'clear':current='0';stored=null;operator=null;replace=false;render();break;case'delete':current=current.length>1?current.slice(0,-1):'0';render();break;case'decimal':if(replace){current='0.';replace=false}else if(!current.includes('.'))current+='.';render();break;case'percent':current=String(Number(current)/100);render();break;case'equals':calculate();break;}});
-document.addEventListener('keydown',e=>{if(/^[0-9]$/.test(e.key))number(e.key);else if(e.key==='.')document.querySelector('[data-action="decimal"]').click();else if(e.key==='Enter'||e.key==='=')calculate();else if(e.key==='Backspace')document.querySelector('[data-action="delete"]').click();else if(e.key==='Escape')document.querySelector('[data-action="clear"]').click();else if(['+','-','*','/'].includes(e.key))choose(({'+':'+','-':'−','*':'×','/':'÷'})[e.key]);});
-render();
+"use strict";
+/* EDIT THE DEFAULT DAY HERE: each item is [task name, duration in minutes].
+   Rename, add, remove, or reorder entries in this array to change the starter schedule. */
+const DEFAULT_SCHEDULE = [
+ ["Finalize script and storyboard",60],
+ ["BREAK",15],
+ ["Generate video clips (shots 1-3)",90],
+ ["BREAK",15],
+ ["Generate video clips (shots 4-6)",90],
+ ["LUNCH BREAK",45],
+ ["Record voiceover and radio lines",60],
+ ["BREAK",15],
+ ["Edit and assemble the video",90],
+ ["BREAK",10],
+ ["Final review and export",45]
+];
+const TZ = "Asia/Kolkata";
+const STORE_KEY = "task-planner-v1";
+const cloneDefaults = () => DEFAULT_SCHEDULE.map((item,i)=>({id:"task-"+i+"-"+Math.random().toString(36).slice(2,7),name:item[0],duration:item[1]}));
+let schedule = cloneDefaults(), completed = {}, soundOn = false, previousActive = null;
+const $ = id => document.getElementById(id);
+const isBreak = item => /break/i.test(item.name);
+function loadSaved(){
+ try{const saved=JSON.parse(localStorage.getItem(STORE_KEY)||"null");if(saved&&Array.isArray(saved.schedule)&&saved.schedule.every(x=>x&&typeof x.name==="string"&&Number.isFinite(Number(x.duration)))){schedule=saved.schedule.map(x=>({id:String(x.id),name:x.name,duration:Math.max(1,Math.min(1440,Math.round(Number(x.duration))))}));completed=saved.completed||{};if(saved.startTime) $("startTime").value=saved.startTime;}}catch(e){console.warn("Could not load saved planner data",e)}
+}
+function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify({schedule,completed,startTime:$("startTime").value}))}catch(e){console.warn("Could not save planner data",e)}}
+function parts(time){const p=time.split(":").map(Number);return p[0]*60+p[1]}
+function fmt(min){min=((min%1440)+1440)%1440;return String(Math.floor(min/60)).padStart(2,"0")+":"+String(min%60).padStart(2,"0")}
+function clockMinutes(){const f=new Intl.DateTimeFormat("en-GB",{timeZone:TZ,hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date());return Number(f.find(x=>x.type==="hour").value)*60+Number(f.find(x=>x.type==="minute").value)}
+function timelineData(){let cursor=parts($("startTime").value||"09:00");return schedule.map((item,index)=>{const start=cursor,end=cursor+item.duration;cursor=end;return {...item,index,start,end,break:isBreak(item)}})}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function renderTimeline(data,activeIndex){
+ const root=$("timeline");
+ if(!data.length){root.innerHTML='<div class="panel empty">No blocks yet. Add your first task below.</div>';return}
+ root.innerHTML=data.map(item=>{
+  const done=!!completed[item.id],active=item.index===activeIndex,icon=item.break?"☕":"✓";
+  return '<article class="block '+(item.break?"break ":"")+(active?"active":"")+'" id="block-'+esc(item.id)+'"><div class="rail" aria-hidden="true">'+icon+'</div><div class="block-card"><div class="block-top"><div><h3 class="block-title">'+esc(item.name)+'</h3><div class="time">'+fmt(item.start)+' – '+fmt(item.end)+' IST</div></div><span class="duration">'+item.duration+' min</span></div><div class="block-bottom">'+(item.break?'<span class="check">Built-in rest time</span>':'<label class="check"><input type="checkbox" data-check="'+esc(item.id)+'" '+(done?"checked":"")+'> Completed</label>')+(active?'<span class="now-tag">HAPPENING NOW</span>':(done&&!item.break?'<span class="now-tag">DONE</span>':''))+'</div></div></article>';
+ }).join("");
+}
+function renderEditor(){
+ $("editorList").innerHTML=schedule.map((item,i)=>'<div class="edit-row"><input class="name-input" type="text" data-name="'+esc(item.id)+'" value="'+esc(item.name)+'" aria-label="Block '+(i+1)+' name"><input type="number" min="1" max="1440" data-duration="'+esc(item.id)+'" value="'+item.duration+'" aria-label="Block '+(i+1)+' duration in minutes"><div class="edit-tools"><button class="icon-btn" type="button" data-move="'+i+'" data-dir="-1" aria-label="Move '+esc(item.name)+' up" '+(i===0?"disabled":"")+'>↑</button><button class="icon-btn" type="button" data-move="'+i+'" data-dir="1" aria-label="Move '+esc(item.name)+' down" '+(i===schedule.length-1?"disabled":"")+'>↓</button><button class="icon-btn" type="button" data-delete="'+esc(item.id)+'" aria-label="Delete '+esc(item.name)+'">×</button></div></div>').join("");
+}
+function activeAt(data,now){return data.findIndex(x=>now>=x.start&&now<x.end)}
+function formatDuration(seconds){const h=Math.floor(seconds/3600),m=Math.floor(seconds%3600/60),s=seconds%60;return (h?String(h).padStart(2,"0")+":":"")+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
+function update(){
+ const data=timelineData(),nowDate=new Date(),now=clockMinutes()+nowDate.getSeconds()/60,active=activeAt(data,now);
+ $("liveClock").textContent=new Intl.DateTimeFormat("en-IN",{timeZone:TZ,weekday:"short",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:true}).format(nowDate)+" IST";
+ const total=data.reduce((n,x)=>n+x.duration,0),start=data.length?data[0].start:parts($("startTime").value||"09:00"),end=start+total;
+ let elapsed=Math.max(0,Math.min(total,now-start)),pct=total?Math.round(elapsed/total*100):0;
+ $("progressFill").style.width=pct+"%";$("progressText").textContent=pct+"%";$("progressBar").setAttribute("aria-valuenow",pct);
+ if(active>=0){const item=data[active];$("currentTitle").textContent=item.name;$("currentNote").textContent=(item.break?"Rest and recharge":"Work block")+" · ends at "+fmt(item.end)+" IST";const next=data[active+1];$("nextLabel").textContent="Time left in this block";$("countdown").textContent=formatDuration(Math.max(0,Math.floor((item.end-now)*60)));$("nextTitle").textContent=next?"Then: "+next.name:"This is the final block";}
+ else if(now<start){$("currentTitle").textContent="Not started";$("currentNote").textContent="Your day begins at "+fmt(start)+" IST";$("nextLabel").textContent="Starts in";$("countdown").textContent=formatDuration(Math.floor((start-now)*60));$("nextTitle").textContent=data[0]?data[0].name:"Add your first block";}
+ else if(now>=end){$("currentTitle").textContent="Day complete";$("currentNote").textContent="Great work — today's schedule is finished."; $("nextLabel").textContent="Schedule status";$("countdown").textContent="100%";$("nextTitle").textContent="All blocks are finished";}
+ else{$("currentTitle").textContent="Between blocks";$("currentNote").textContent="Check the timeline for the next activity.";const next=data.find(x=>x.start>now);$("nextLabel").textContent="Next block starts in";$("countdown").textContent=next?formatDuration(Math.floor((next.start-now)*60)):"—";$("nextTitle").textContent=next?next.name:"No more blocks today"}
+ if(active!==previousActive&&previousActive!==null&&soundOn){const old=data[previousActive],current=data[active];if(old||current)beep()}
+ previousActive=active;
+ renderTimeline(data,active);
+}
+function beep(){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const ctx=new C(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);osc.frequency.value=660;gain.gain.setValueAtTime(.0001,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.12,ctx.currentTime+.03);gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.35);osc.start();osc.stop(ctx.currentTime+.36);osc.onended=()=>ctx.close()}catch(e){console.warn("Sound unavailable",e)}}
+$("timeline").addEventListener("change",e=>{const id=e.target.dataset.check;if(id){completed[id]=e.target.checked;save();renderTimeline(timelineData(),activeAt(timelineData(),clockMinutes()))}});
+$("editorList").addEventListener("change",e=>{const id=e.target.dataset.name||e.target.dataset.duration;if(!id)return;const item=schedule.find(x=>x.id===id);if(!item)return;if(e.target.dataset.name)item.name=e.target.value.trim()||"Untitled task";else item.duration=Math.max(1,Math.min(1440,Math.round(Number(e.target.value)||1)));save();renderEditor();update()});
+$("editorList").addEventListener("click",e=>{const del=e.target.dataset.delete,move=e.target.dataset.move;if(del){schedule=schedule.filter(x=>x.id!==del);delete completed[del]}else if(move!==undefined){const i=Number(move),j=i+Number(e.target.dataset.dir);if(j>=0&&j<schedule.length)[schedule[i],schedule[j]]=[schedule[j],schedule[i]]}else return;save();renderEditor();update()});
+$("addForm").addEventListener("submit",e=>{e.preventDefault();const name=$("newName").value.trim(),duration=Math.max(1,Math.min(1440,Math.round(Number($("newDuration").value)||1)));if(!name)return;schedule.push({id:"task-"+Date.now()+"-"+Math.random().toString(36).slice(2,7),name,duration});$("newName").value="";$("newDuration").value="30";save();renderEditor();update()});
+$("startTime").addEventListener("change",()=>{save();update()});
+$("soundBtn").addEventListener("click",()=>{soundOn=!soundOn;$("soundBtn").textContent="♪ Sound: "+(soundOn?"On":"Off");$("soundBtn").setAttribute("aria-pressed",String(soundOn));if(soundOn)beep()});
+$("notifyBtn").addEventListener("click",async()=>{if(!("Notification"in window)){alert("Notifications are not supported in this browser.");return}try{const permission=await Notification.requestPermission();$("notifyBtn").textContent=permission==="granted"?"Notifications enabled":permission==="denied"?"Notifications blocked":"Enable notifications";if(permission==="granted")new Notification("Task Planner",{body:"Notifications are enabled. Keep this page open for schedule reminders."})}catch(e){alert("Could not enable notifications in this browser.")}});
+$("printBtn").addEventListener("click",()=>window.print());
+loadSaved();renderEditor();update();setInterval(update,1000);
 </script>
-</body></html>
+</body>
+</html>
