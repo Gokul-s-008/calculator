@@ -100,7 +100,7 @@ function update(){
  else if(now<start){$("currentTitle").textContent="Not started";$("currentNote").textContent="Your day begins at "+fmt(start)+" IST";$("nextLabel").textContent="Starts in";$("countdown").textContent=formatDuration(Math.floor((start-now)*60));$("nextTitle").textContent=data[0]?data[0].name:"Add your first block";}
  else if(now>=end){$("currentTitle").textContent="Day complete";$("currentNote").textContent="Great work — today's schedule is finished."; $("nextLabel").textContent="Schedule status";$("countdown").textContent="100%";$("nextTitle").textContent="All blocks are finished";}
  else{$("currentTitle").textContent="Between blocks";$("currentNote").textContent="Check the timeline for the next activity.";const next=data.find(x=>x.start>now);$("nextLabel").textContent="Next block starts in";$("countdown").textContent=next?formatDuration(Math.floor((next.start-now)*60)):"—";$("nextTitle").textContent=next?next.name:"No more blocks today"}
- if(active!==previousActive&&previousActive!==null&&soundOn){const old=data[previousActive],current=data[active];if(old||current)beep()}
+ if(active!==previousActive&&previousActive!==null){const old=data[previousActive],current=data[active];if(soundOn&&(old||current))beep();if("Notification"in window&&Notification.permission==="granted"&&((current&&current.break)||(old&&old.break))){const title=current&&current.break?"Break time":"Break finished";const body=current&&current.break?"A scheduled break has started. Take a moment to recharge.":"Your break is over. The next block is ready.";try{new Notification(title,{body})}catch(e){console.warn("Notification unavailable",e)}}}
  previousActive=active;
  renderTimeline(data,active);
 }
